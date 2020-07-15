@@ -7,17 +7,9 @@ export default [
     input: "src/main.js",
     output: {
       name: "fit",
-      file: pkg.browser,
+      file: pkg.main,
       format: "umd",
     },
     plugins: [resolve(), commonjs()],
-  },
-  {
-    input: "src/main.js",
-    // external: [],
-    output: [
-      { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "es" },
-    ],
   },
 ];

@@ -1,9 +1,7 @@
 {
   "name": "fit",
   "version": "1.0.0",
-  "main": "dist/fit.cjs.js",
-  "module": "dist/fit.esm.js",
-  "browser": "dist/fit.umd.js",
+  "main": "dist/fit.umd.js",
   "repository": "git@github.com:barelyhuman/fit.git",
   "author": "sidgroks@gmail.com <sidgroks@gmail.com>",
   "license": "MIT",
