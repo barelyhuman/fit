@@ -27,8 +27,8 @@ function createInstanceWithURL(url) {
   const config = { url: url };
   return {
     get: () => _get(config),
-    post: () => _post(config, body),
-    put: () => _put(config, body),
+    post: (body) => _post(config, body),
+    put: (body) => _put(config, body),
     delete: () => _delete(config),
   };
 }
