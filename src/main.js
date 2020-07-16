@@ -1,13 +1,7 @@
-const isFetchAvailable = () => (window && window.fetch ? true : false);
-
-const generateRange = (start, end) => {
-  const length = Math.abs(end - start);
-  const array = Array.from({ length }, (_, i) => {
-    return i + start;
-  });
-  array.push(end);
-  return array;
-};
+import { isFetchAvailable } from "./isFetchAvailable";
+import { generateRange } from "./generateRange";
+import { sendErrorResponse } from "./sendErrorResponse";
+import { decideContentTypeHeader } from "./decideContentTypeHeader";
 
 const rejectStatusCodes = []
   .concat(generateRange(400, 499))
@@ -109,42 +103,6 @@ function _delete(config, options = {}) {
     }
     return res.json();
   });
-}
-
-async function sendErrorResponse(response) {
-  var error = new Error(response.statusText);
-  error.response = response;
-  error.error = await response.json();
-  return Promise.reject(error);
-}
-
-function decideContentTypeHeader(body) {
-  const contentTypes = {
-    json: "application/json",
-    buffer: "application/octet-stream",
-    text: "text/html",
-  };
-
-  let selectedContentType = "buffer";
-
-  let _body = body;
-  if (typeof body === "string") {
-    selectedContentType = "text";
-  } else if (
-    typeof body === "object" ||
-    typeof body === "boolean" ||
-    typeof body === "number"
-  ) {
-    if (_body === null) {
-      _body = "";
-    }
-    _body = JSON.stringify(_body);
-    selectedContentType = "json";
-  }
-  return {
-    body: _body,
-    contentHeader: contentTypes[selectedContentType],
-  };
 }
 
 export default main;
