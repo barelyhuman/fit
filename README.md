@@ -1,3 +1,6 @@
+<p align="center">
+    <img width="125" src="docs/logo.svg"/>
+</p>
 <h1 align="center">
 Fit
 </h1>
