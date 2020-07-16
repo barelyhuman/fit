@@ -47,12 +47,14 @@ function _get(config, options = {}) {
 }
 
 function _post(config, body, options = {}) {
+  const { body: _body, contentHeader } = decideContentTypeHeader(body);
+
   const _options = Object.assign({}, options, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": contentHeader,
     },
-    body: JSON.stringify(body),
+    body: _body,
   });
   return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
@@ -63,12 +65,14 @@ function _post(config, body, options = {}) {
 }
 
 function _put(config, body, options = {}) {
+  const { body: _body, contentHeader } = decideContentTypeHeader(body);
+
   const _options = Object.assign({}, options, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": contentHeader,
     },
-    body: JSON.stringify(body),
+    body: _body,
   });
   return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
@@ -79,12 +83,13 @@ function _put(config, body, options = {}) {
 }
 
 function _patch(config, body, options = {}) {
+  const { body: _body, contentHeader } = decideContentTypeHeader(body);
   const _options = Object.assign({}, options, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": contentHeader,
     },
-    body: JSON.stringify(body),
+    body: _body,
   });
   return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
@@ -111,6 +116,35 @@ async function sendErrorResponse(response) {
   error.response = response;
   error.error = await response.json();
   return Promise.reject(error);
+}
+
+function decideContentTypeHeader(body) {
+  const contentTypes = {
+    json: "application/json",
+    buffer: "application/octet-stream",
+    text: "text/html",
+  };
+
+  let selectedContentType = "buffer";
+
+  let _body = body;
+  if (typeof body === "string") {
+    selectedContentType = "text";
+  } else if (
+    typeof body === "object" ||
+    typeof body === "boolean" ||
+    typeof body === "number"
+  ) {
+    if (_body === null) {
+      _body = "";
+    }
+    _body = JSON.stringify(_body);
+    selectedContentType = "json";
+  }
+  return {
+    body: _body,
+    contentHeader: contentTypes[selectedContentType],
+  };
 }
 
 export default main;

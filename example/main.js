@@ -11,6 +11,15 @@
       console.log(err);
     });
 
+  fit("https://jsonplaceholder.typicode.com/posts")
+    .post("hello")
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   // Error Case
   fit("https://jsonplaceholder.typicode.com/posts")
     .delete()
