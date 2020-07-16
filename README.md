@@ -61,8 +61,12 @@ fit("localhost:3000/api/posts/1").post({
 // @param [options] - fetch options that you want to pass through
 
 fit(url).get([options]);
+
 fit(url).post(body, [options]);
+
 fit(url).patch(body, [options]);
+
 fit(url).put(body, [options]);
+
 fit(url).delete(options);
 ```
