@@ -26,17 +26,19 @@ function main(url) {
 function createInstanceWithURL(url) {
   const config = { url: url };
   return {
-    get: () => _get(config),
-    post: (body) => _post(config, body),
-    put: (body) => _put(config, body),
-    delete: () => _delete(config),
+    get: (options) => _get(config, options),
+    post: (body, options) => _post(config, body, options),
+    put: (body, options) => _put(config, body, options),
+    patch: (body, options) => _patch(config, body, options),
+    delete: (options) => _delete(config, options),
   };
 }
 
-function _get(config) {
-  return fetch(config.url, {
+function _get(config, options = {}) {
+  const _options = Object.assign({}, options, {
     method: "GET",
-  }).then((res) => {
+  });
+  return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
       return sendErrorResponse(res);
     }
@@ -44,14 +46,15 @@ function _get(config) {
   });
 }
 
-function _post(config, body) {
-  return fetch(config.url, {
+function _post(config, body, options = {}) {
+  const _options = Object.assign({}, options, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  }).then((res) => {
+  });
+  return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
       return sendErrorResponse(res);
     }
@@ -59,14 +62,15 @@ function _post(config, body) {
   });
 }
 
-function _put(config, body) {
-  return fetch(config.url, {
+function _put(config, body, options = {}) {
+  const _options = Object.assign({}, options, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  }).then((res) => {
+  });
+  return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
       return sendErrorResponse(res);
     }
@@ -74,10 +78,27 @@ function _put(config, body) {
   });
 }
 
-function _delete(config) {
-  return fetch(config.url, {
+function _patch(config, body, options = {}) {
+  const _options = Object.assign({}, options, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return fetch(config.url, _options).then((res) => {
+    if (shouldReject(res.status)) {
+      return sendErrorResponse(res);
+    }
+    return res.json();
+  });
+}
+
+function _delete(config, options = {}) {
+  const _options = Object.assign({}, options, {
     method: "DELETE",
-  }).then((res) => {
+  });
+  return fetch(config.url, _options).then((res) => {
     if (shouldReject(res.status)) {
       return sendErrorResponse(res);
     }
