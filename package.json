@@ -1,6 +1,6 @@
 {
   "name": "@aliezsid/fit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/fit.umd.js",
   "repository": "git@github.com:barelyhuman/fit.git",
   "author": "sidgroks@gmail.com <sidgroks@gmail.com>",
