@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"target": "esnext",
+		"removeComments": true,
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"moduleResolution": "node",
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "dist",
+		"module": "esnext",
+		"esModuleInterop": true,
+		"lib": ["esnext", "dom"]
+	},
+	"include": ["src", "tests"],
+	"exclude": ["node_modules"]
+}

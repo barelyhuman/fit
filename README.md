@@ -1,72 +1,80 @@
 <h1 align="center">
 Fit
 </h1>
-<p align="center">Minimal wrapper around <code>window.fetch</code> to make my life easier</p>
-
-## Disclaimer
-
-I understand the readme isn't thorough right now and only important aspects of the api are out here, for the remaining stuff you can go through the source code, it's a very simple wrapper.
+<p align="center">Minimal functional style wrapper around fetch to make my life a little more easier</p>
 
 ## Install
 
 ```sh
-npm i @aliezsid/fit
+npm i @barelyhuman/fit
 ```
 
 ## Usage
 
-Fit has a simple API
+Fit has a very simple and modular API
 
 ```js
+import {create, createImmediate} from '@barelyhuman/fit'
 
-fit(url).[method].then().catch();
+// create allows you to well "create" a baseURL based
+// instance of the fetcher module
+const simpleFetcher = create('https://api.example.com')
 
+// for cases where you don't need the baseURL form of functionality
+// you can use `createImmediate` instead
+const immediateFetcher = createImmediate(
+	'https://api.example.com/posts/1',
+	window.fetch,
+).get()
 
-// Get Request
+// a simple GET request
+const response = await simpleFetcher(`posts/${id}`).get()
 
-const data = await fit("localhost:3000/api/posts/1").get()
-// or
-fit("localhost:3000/api/posts/1").get()
-.then(data=>{
-    console.log(data);
-})
-.catch(err=>{
-    console.log(err);
-})
-
-
-
-// Post Request
-
-const data = await fit("localhost:3000/api/posts/1").post({
-    params:1
-})
-// or
-fit("localhost:3000/api/posts/1").post({
-    params:1
-})
-.then(data=>{
-    console.log(data);
-})
-.catch(err=>{
-    console.log(err);
+// a simple POST request
+const response = await simpleFetcher(`posts`).post({
+	userId: 1,
+	title: 'Hello',
+	body: 'New content',
 })
 
+// you can pass an optional fetch if using it anywhere other than the browser
+import nodeFetch from 'node-fetch'
+
+const fetcherNode = create('https://api.example.com', nodeFetch)
 ```
 
-## API
+#### Examples
+
+This is a simple demonstration based on what I use the library for
 
 ```js
-// @param body || null - depending on method
-// @param [options] - fetch options that you want to pass through
+import {create} from '@barelyhuman/fit'
 
-fit(url).get([options]);
+const fetcher = create('https://api.example.com')
 
-fit(url).post(body, [options]);
+const postsSDK = (id?: string | number) => {
+	let url = `/api/posts`
 
-fit(url).patch(body, [options]);
+	if (id) {
+		url += `/${id}`
+	}
 
-fit(url).put(body, [options]);
+	return fetcher(url)
+}
 
-fit(url).delete(options);
+const getPostById = id => {
+	return postsSDK(id).get()
+}
+
+const createPost = payload => {
+	return postsSDK().post(payload)
+}
+
+const updatePost = (id, payload) => {
+	return postsSDK(id).put(payload)
+}
+
+const deletePost = id => {
+	return postsSDK(id).delete()
+}
 ```
